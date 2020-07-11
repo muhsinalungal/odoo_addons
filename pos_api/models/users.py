@@ -6,6 +6,7 @@ from odoo import api, fields, models
 class ResUsers(models.Model):
     _inherit = "res.users"
 
+    default_pos = fields.Many2one('pos.config', string="Allowed POS")
     api_token = fields.Char(
         "API Token",
         default=lambda self: self._get_unique_api_token(),
