@@ -112,17 +112,19 @@ class POSapis(http.Controller):
 
                 order_lines.append((0, 0, line))
             order_data = {
-                'partner_id': int(request.jsonrequest['data'].get('partner_id')),
                 'session_id': int(request.jsonrequest['data'].get('session_id')),
                 'amount_paid': request.jsonrequest['data'].get('amount_paid'),
                 'amount_return': request.jsonrequest['data'].get('amount_return'),
                 'amount_tax': request.jsonrequest['data'].get('amount_tax'),
                 'amount_total': request.jsonrequest['data'].get('amount_total'),
                 'user_id': int(uid),
-                'pos_reference': request.jsonrequest['data'].get('pos_reference'),
                 'lines': order_lines
-
             }
+            if request.jsonrequest['data'].get('partner_id'):
+                order_data.update({'partner_id': int(request.jsonrequest['data'].get('partner_id'))})
+            if request.jsonrequest['data'].get('pos_reference'):
+                order_data.update({'pos_reference': request.jsonrequest['data'].get('pos_reference')})
+
             order = PosOrder.sudo().create(order_data)
             order.add_payment({
                 'pos_order_id': order.id,
